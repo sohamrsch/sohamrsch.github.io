@@ -1,0 +1,263 @@
+:root {
+  --jig-violet: #6a2da8;
+  --jig-violet-light: #a55fdc;
+  --jig-ink: #1b1b1f;
+}
+
+body {
+  font-family: 'Noto Sans', sans-serif;
+  color: var(--jig-ink);
+}
+
+.title, .subtitle, .navbar-item, h1, h2, h3, h4 {
+  font-family: 'Noto Sans', sans-serif;
+}
+
+.jig-hero {
+  background: linear-gradient(160deg, #f4effb 0%, #ffffff 55%);
+  padding-top: 3.5rem;
+  padding-bottom: 2.5rem;
+}
+
+.jig-accent {
+  color: var(--jig-violet);
+}
+
+.author-block {
+  font-size: 1.05rem;
+}
+
+.author-block sup {
+  color: var(--jig-violet);
+  font-weight: 600;
+}
+
+.publication-links .button {
+  border-radius: 999px;
+  margin: 0.25rem;
+}
+
+.publication-links .button.is-jig {
+  background-color: var(--jig-ink);
+  color: white;
+  border: none;
+}
+.publication-links .button.is-jig:hover {
+  background-color: var(--jig-violet);
+}
+
+.publication-links .button.is-outlined-jig {
+  background-color: white;
+  color: var(--jig-ink);
+  border: 1px solid #ddd;
+}
+.publication-links .button.is-outlined-jig:hover {
+  border-color: var(--jig-violet);
+  color: var(--jig-violet);
+}
+
+.hero-teaser-img {
+  border-radius: 10px;
+  box-shadow: 0 12px 32px rgba(20, 10, 40, 0.14);
+  max-width: 100%;
+}
+
+.abstract-wrap::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.teaser-figure {
+  float: right;
+  width: 40%;
+  max-width: 340px;
+  margin: 0.2rem 0 1rem 1.6rem;
+}
+
+.teaser-figure .hero-teaser-img {
+  width: 100%;
+  display: block;
+}
+
+.teaser-caption {
+  margin: 0.6rem 0 0;
+  color: #555;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+@media (max-width: 768px) {
+  .teaser-figure {
+    float: none;
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto 1.4rem;
+  }
+}
+
+section.section {
+  padding-top: 2.6rem;
+  padding-bottom: 2.6rem;
+}
+
+.section-title {
+  font-weight: 700;
+  margin-bottom: 1.2rem;
+}
+
+.section-title .bar {
+  display: inline-block;
+  width: 34px;
+  height: 4px;
+  background: var(--jig-violet);
+  border-radius: 2px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+.figure-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 18px rgba(20, 10, 40, 0.08);
+  padding: 1.1rem;
+  height: 100%;
+}
+
+.figure-card img {
+  border-radius: 6px;
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.figure-caption {
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 0.75rem;
+  line-height: 1.5;
+}
+
+.figure-caption b {
+  color: var(--jig-ink);
+}
+
+.highlight-box {
+  background: #f4effb;
+  border-left: 4px solid var(--jig-violet);
+  border-radius: 6px;
+  padding: 1.4rem 1.6rem;
+  font-size: 1.02rem;
+  line-height: 1.65;
+}
+
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.results-table th, .results-table td {
+  padding: 0.5rem 0.7rem;
+  text-align: center;
+}
+
+.results-table thead th {
+  border-bottom: 2px solid var(--jig-ink);
+  font-weight: 700;
+}
+
+.results-table td:first-child, .results-table th:first-child {
+  text-align: left;
+}
+
+.results-table tbody tr {
+  border-bottom: 1px solid #eee;
+}
+
+.results-table tbody tr.ours-row {
+  background: #f4effb;
+  font-weight: 600;
+}
+
+.results-table .best {
+  font-weight: 700;
+}
+
+.results-table .second {
+  text-decoration: underline;
+  color: var(--jig-violet);
+  font-weight: 600;
+}
+
+.metric-group-header {
+  border-bottom: 1px solid #ccc;
+}
+
+.stat-tile {
+  text-align: center;
+  padding: 1.2rem 0.5rem;
+}
+
+.stat-tile .stat-number {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: var(--jig-violet);
+  line-height: 1.1;
+}
+
+.stat-tile .stat-label {
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 0.4rem;
+}
+
+.gallery-wrap {
+  overflow-x: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 18px rgba(20, 10, 40, 0.08);
+}
+
+.gallery-wrap img {
+  display: block;
+  min-width: 1400px;
+  width: 100%;
+  height: auto;
+}
+
+.dna-list li {
+  margin-bottom: 0.6rem;
+  line-height: 1.55;
+}
+
+pre.bibtex {
+  background: #f6f4fa;
+  border-radius: 8px;
+  padding: 1.2rem;
+  font-size: 0.82rem;
+  overflow-x: auto;
+  line-height: 1.5;
+}
+
+footer.footer {
+  background-color: #fafafa;
+  padding: 2.2rem 1.5rem;
+}
+
+.limits-card {
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  height: 100%;
+  background: #fff;
+}
+
+.tag-honest {
+  background: #fff4e5;
+  color: #8a5a00;
+  border-radius: 999px;
+  padding: 0.15rem 0.7rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
