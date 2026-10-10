@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="OpenSNAP turns a 3D scan into an open-vocabulary object database: click any object for its mask and name, ask for anything in words, and run declarative queries in milliseconds.">
+  <meta name="keywords" content="OpenSNAP, open-vocabulary, 3D point cloud, query language, interactive segmentation, object database">
+  <title>OpenSNAP: An Open-Vocabulary Object Database for 3D Scans</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/opensnap.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/opensnap.js"></script>
+</head>
+<body>
+
+<section class="os-hero">
+  <div class="container is-max-desktop has-text-centered">
+    <div class="os-kicker">Open-vocabulary 3D · Query processing · Interactive segmentation</div>
+    <h1 class="os-title">Open<span>SNAP</span></h1>
+    <p class="os-subtitle">An open-vocabulary object database for 3D scans. Click anything to get its mask and its name,
+      ask for anything in words, and query a whole building in milliseconds.</p>
+
+    <div class="os-authors">
+      <span><a href="https://sohampahari.github.io">Soham Pahari</a><sup>1</sup></span>,&nbsp;
+      <span><a href="https://erp.nitw.ac.in/ext/profile/cs-msv">Dr. M. Srinivas</a><sup>2</sup></span>
+    </div>
+    <div class="os-affil"><sup>1</sup>Indian Statistical Institute, Kolkata &nbsp;·&nbsp; <sup>2</sup>National Institute of Technology Warangal</div>
+    <div class="os-affil" style="font-size:0.85rem"><a href="mailto:soham.p_t@isical.ac.in">soham.p_t@isical.ac.in</a> &nbsp;·&nbsp; <a href="mailto:msv@nitw.ac.in">msv@nitw.ac.in</a></div>
+
+    <div class="os-links">
+      <a class="os-btn is-disabled" href="#"><i class="fas fa-file-pdf"></i>Paper (soon)</a>
+      <a class="os-btn is-disabled" href="#"><i class="ai ai-arxiv"></i>arXiv (soon)</a>
+      <a class="os-btn is-primary" href="https://github.com/suhanpahari/OpenSNAP"><i class="fab fa-github"></i>Code</a>
+      <a class="os-btn" href="https://huggingface.co/suhanxvii/opensnap-weights"><i class="fas fa-cube"></i>Weights</a>
+      <a class="os-btn is-disabled" href="#"><i class="fas fa-play"></i>Live demo (soon)</a>
+    </div>
+
+    <div class="os-teaser">
+      <video autoplay muted loop playsinline poster="./static/images/poster_viewer_demo.jpg">
+        <source src="./static/videos/viewer_demo.mp4" type="video/mp4">
+      </video>
+    </div>
+    <p class="os-teaser-cap">A real session on a room held out from training: click objects to get their masks and names, then ask for things in words.</p>
+  </div>
+</section>
+
+<nav class="os-nav">
+  <div class="inner">
+    <a href="#abstract">Abstract</a><a href="#method">Method</a><a href="#explore">Try a query</a>
+    <a href="#clicks">Corrective clicks</a><a href="#video">Phone video</a><a href="#gallery">Gallery</a>
+    <a href="#results">Results</a><a href="#bibtex">BibTeX</a>
+  </div>
+</nav>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="os-pillars reveal">
+      <div class="os-pillar" style="--c: var(--ingest)">
+        <div class="tag">Data model</div>
+        <h3>A scan becomes a table</h3>
+        <p>Each object is one tuple: voxels, box, confidence, a segmenter token and mask-pooled 3D vision–language evidence. Built once, queried forever.</p>
+      </div>
+      <div class="os-pillar" style="--c: var(--query)">
+        <div class="tag">Query language</div>
+        <h3>OVQL, with probabilities</h3>
+        <p><code>IS('whiteboard') AND NEAR(IS('chair'), 1.0)</code>: open-vocabulary predicates with calibrated semantics, spatial and boolean operators, and query-time semantic cracking.</p>
+      </div>
+      <div class="os-pillar" style="--c: var(--click)">
+        <div class="tag">Interaction</div>
+        <h3>Click, correct, name</h3>
+        <p>Positive <em>and</em> negative clicks on a segmenter that was only trained on positive ones, plus naming from the real photos the scan was made from.</p>
+      </div>
+    </div>
+
+    <div class="os-stats reveal">
+      <div class="os-stat"><div class="v">0.8<small> ms</small></div><div class="k">per query on a stored room, vs 8.8 s to re-process the scan</div></div>
+      <div class="os-stat"><div class="v">68<small> rooms</small></div><div class="k">5,149 objects in one catalog, queried in 0.9–3.4 ms</div></div>
+      <div class="os-stat"><div class="v">+15<small> IoU</small></div><div class="k">after 5 corrective clicks on Replica (59.5 → 74.8)</div></div>
+      <div class="os-stat"><div class="v">7<small> datasets</small></div><div class="k">indoor RGB-D, laser scans, synthetic rooms and outdoor LiDAR</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="abstract" style="padding-top: 0.5rem">
+  <div class="container is-max-desktop">
+    <h2 class="os-h2"><span class="num">01</span>Abstract</h2>
+    <div class="os-abstract content reveal">
+      <p>3D scans of rooms, buildings and streets are collected at scale, but they stay raw point sets: every semantic
+        question (<em>where are the chairs? which monitor is next to the bottle?</em>) means re-running a segmentation
+        network over the whole scan with a fixed list of class names. We present <b>OpenSNAP</b>, which turns a scan into an
+        <b>open-vocabulary object database</b>. A scan is ingested once into an <b>object relation</b>: one tuple per object with
+        its geometry, a learned segmenter token and mask-pooled 3D vision–language evidence. Open-vocabulary predicates such as
+        <code>IS('whiteboard')</code> get <b>calibrated probabilistic semantics</b>, and an <b>open-vocabulary query language
+        (OVQL)</b> combines them with spatial (<code>NEAR</code>, <code>ABOVE</code>, <code>ON</code>) and boolean operators.</p>
+      <p>Queries run on the stored relation in under a millisecond per room (vs. 8.8 s to re-process the scan) and scale to a
+        68-room building in 0.9–3.4 ms. They are refined lazily by <b>semantic cracking</b>, which materialises the objects a
+        query could not explain and keeps them for later queries. The operators that fill the relation are themselves improved:
+        object-anchored open-vocabulary evidence (58.2 mIoU on ScanNet), click-to-name with a vision–language model (40.1%
+        accuracy on Matterport-160), <b>negative clicks</b> for a segmenter trained only on positive ones (+4 to +15 IoU after
+        five clicks on five datasets), and <b>phone-video ingest</b> with a guard against out-of-distribution features. We
+        evaluate on ScanNet, ScanNet200, Matterport3D-160, S3DIS, Replica, nuScenes and SemanticKITTI.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="method">
+  <div class="container is-max-desktop">
+    <h2 class="os-h2"><span class="num">02</span>How it works</h2>
+    <p class="os-lead">Two planes. The ingest plane pays the expensive network cost once per scan; the query plane answers
+      every later question from the stored relation and only goes back to the network when it has to.</p>
+    <div class="os-figure reveal">
+      <svg viewBox="0 0 960 400" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif" font-size="13">
+        <defs>
+          <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker>
+          <linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#0d9488"/><stop offset="1" stop-color="#2563eb"/></linearGradient>
+        </defs>
+        <rect x="10" y="10" width="300" height="380" rx="14" fill="#eff6ff" stroke="#bfdbfe"/>
+        <text x="28" y="38" font-family="Space Grotesk" font-weight="700" font-size="16" fill="#1d4ed8">INGEST · once per scan</text>
+        <g fill="#fff" stroke="#93c5fd">
+          <rect x="30" y="58" width="120" height="48" rx="9"/><rect x="170" y="58" width="120" height="48" rx="9"/>
+          <rect x="30" y="140" width="260" height="44" rx="9"/>
+          <rect x="30" y="210" width="125" height="58" rx="9"/><rect x="165" y="210" width="125" height="58" rx="9"/>
+          <rect x="30" y="300" width="260" height="58" rx="9"/>
+        </g>
+        <text x="90" y="80" text-anchor="middle" fill="#0f172a">point cloud</text><text x="90" y="96" text-anchor="middle" fill="#64748b" font-size="11">XYZ only</text>
+        <text x="230" y="80" text-anchor="middle" fill="#0f172a">phone video</text><text x="230" y="96" text-anchor="middle" fill="#64748b" font-size="11">→ metric point map</text>
+        <text x="160" y="167" text-anchor="middle" fill="#0f172a">voxelize · gravity align · collapse guard</text>
+        <text x="92" y="234" text-anchor="middle" fill="#0f172a">promptable</text><text x="92" y="250" text-anchor="middle" fill="#0f172a">segmenter</text><text x="92" y="263" text-anchor="middle" fill="#64748b" font-size="11">frozen + adapters</text>
+        <text x="227" y="234" text-anchor="middle" fill="#0f172a">3D vision–</text><text x="227" y="250" text-anchor="middle" fill="#0f172a">language features</text><text x="227" y="263" text-anchor="middle" fill="#64748b" font-size="11">frozen</text>
+        <text x="160" y="325" text-anchor="middle" fill="#0f172a">object proposals</text><text x="160" y="343" text-anchor="middle" fill="#64748b" font-size="11">mask-pooled evidence per object</text>
+        <g stroke="#64748b" stroke-width="1.6" fill="none" marker-end="url(#ar)">
+          <path d="M90,106 L120,138"/><path d="M230,106 L200,138"/>
+          <path d="M120,184 L95,208"/><path d="M200,184 L225,208"/>
+          <path d="M92,268 L130,298"/><path d="M227,268 L190,298"/>
+          <path d="M290,329 L352,250"/>
+        </g>
+
+        <rect x="355" y="110" width="250" height="220" rx="14" fill="#ffffff" stroke="#cbd5e1"/>
+        <rect x="355" y="110" width="250" height="6" rx="3" fill="url(#g)"/>
+        <text x="480" y="142" text-anchor="middle" font-family="Space Grotesk" font-weight="700" font-size="16" fill="#0f172a">Object relation</text>
+        <g font-family="JetBrains Mono" font-size="11" fill="#334155">
+          <text x="372" y="170">oid │ voxels │ box │ conf</text>
+          <text x="372" y="188">    │ token  │ clip│ prov</text>
+          <line x1="372" y1="198" x2="590" y2="198" stroke="#e2e8f0"/>
+          <text x="372" y="218">01  │ ▮▮▮▮   │ ▭   │ .93</text>
+          <text x="372" y="236">02  │ ▮▮     │ ▭   │ .88</text>
+          <text x="372" y="254">03  │ ▮▮▮    │ ▭   │ .71</text>
+          <text x="372" y="272" fill="#0d9488">new │ ▮      │ ▭   │ cracked</text>
+        </g>
+        <text x="480" y="312" text-anchor="middle" fill="#94a3b8" font-size="11">persisted · building-scale catalog</text>
+
+        <rect x="650" y="10" width="300" height="380" rx="14" fill="#fff7ed" stroke="#fed7aa"/>
+        <text x="668" y="38" font-family="Space Grotesk" font-weight="700" font-size="16" fill="#c2410c">QUERY · milliseconds</text>
+        <g fill="#fff" stroke="#fdba74">
+          <rect x="668" y="58" width="264" height="48" rx="9"/>
+          <rect x="668" y="130" width="264" height="58" rx="9"/>
+          <rect x="668" y="212" width="264" height="58" rx="9"/>
+        </g>
+        <text x="800" y="87" text-anchor="middle" font-family="JetBrains Mono" font-size="11.5" fill="#0f172a">IS('mug') AND ON(·, IS('desk'))</text>
+        <text x="800" y="155" text-anchor="middle" fill="#0f172a">two-phase plan</text><text x="800" y="174" text-anchor="middle" fill="#64748b" font-size="11">probabilistic filter → spatial join per room</text>
+        <text x="800" y="237" text-anchor="middle" fill="#0f172a">semantic cracking</text><text x="800" y="256" text-anchor="middle" fill="#64748b" font-size="11">no object explains it? materialise one</text>
+        <rect x="668" y="294" width="125" height="72" rx="9" fill="#dcfce7" stroke="#86efac"/>
+        <rect x="807" y="294" width="125" height="72" rx="9" fill="#dcfce7" stroke="#86efac"/>
+        <text x="730" y="320" text-anchor="middle" fill="#14532d">click ± clicks</text><text x="730" y="338" text-anchor="middle" fill="#14532d">→ mask</text><text x="730" y="355" text-anchor="middle" fill="#15803d" font-size="11">corrective decoder</text>
+        <text x="870" y="320" text-anchor="middle" fill="#14532d">mask → name</text><text x="870" y="338" text-anchor="middle" fill="#14532d">3D-propose /</text><text x="870" y="355" text-anchor="middle" fill="#15803d" font-size="11">VLM-choose</text>
+        <g stroke="#64748b" stroke-width="1.6" fill="none" marker-end="url(#ar)">
+          <path d="M800,106 L800,128"/><path d="M800,188 L800,210"/>
+          <path d="M666,160 L608,190"/><path d="M608,250 L666,240"/>
+          <path d="M666,330 L608,300"/>
+        </g>
+      </svg>
+    </div>
+    <p class="os-cap"><b>Ingest</b> runs the frozen networks once and stores one tuple per object. <b>Queries</b> are planned
+      over the relation: a probabilistic open-vocabulary filter, then a room-partitioned spatial join. When no stored object
+      covers a phrase, <b>semantic cracking</b> uses the phrase as a click oracle, materialises the object and keeps it, with a
+      negative cache so a failed lookup is never repeated. Clicks and names write into the same relation.</p>
+    <div class="os-media reveal" style="margin-top:1.4rem"><video controls muted loop playsinline poster="./static/images/poster_explainer.jpg"><source src="./static/videos/explainer.mp4" type="video/mp4"></video></div>
+    <p class="os-cap">One-minute system walkthrough.</p>
+  </div>
+</section>
+
+<section class="section" id="explore" style="background:var(--soft)">
+  <div class="container is-max-desktop">
+    <h2 class="os-h2"><span class="num">03</span>Try a query</h2>
+    <p class="os-lead">Real, unfiltered outputs on a Replica room held out from all training. Every query word below is
+      outside the training vocabulary. Pick a phrase or a click.</p>
+    <div class="os-explorer reveal">
+      <div class="os-console">
+        <div class="prompt">ovql&gt; replica/room0</div>
+        <div class="group">text queries</div>
+        <div class="os-chips" id="chips-query"></div>
+        <div class="group">random clicks</div>
+        <div class="os-chips" id="chips-click"></div>
+        <div class="readout" id="readout"></div>
+      </div>
+      <div class="os-stage"><img id="stage-img" src="./static/images/query/room0_q1_vase.jpg" alt="query result"></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="clicks">
+  <div class="container is-max-desktop">
+    <h2 class="os-h2"><span class="num">04</span>Corrective clicks</h2>
+    <p class="os-lead">The segmenter was trained with positive clicks only. A corrective decoder (click-type embeddings and
+      a previous-mask prompt), LoRA adapters and test-time token tuning let users say <em>“not this part”</em>, while
+      positive-only clicks still follow the frozen path exactly.</p>
+    <div class="reveal">
+      <div class="os-toggle" id="bar-toggle"><button data-k="5" class="is-active">IoU @ 5 clicks</button><button data-k="10">IoU @ 10 clicks</button></div>
+      <div class="os-legend"><span><i style="background:#cbd5e1"></i>frozen decoder, same clicks</span><span><i style="background:linear-gradient(90deg,#0d9488,#2563eb)"></i>OpenSNAP</span></div>
+      <div class="os-bars" id="bars"></div>
+      <p class="os-cap">Same simulated positive + negative click sequence for both methods. Click latency: 16–43 ms on a
+        267k-voxel room.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="video" style="background:var(--soft)">
+  <div class="container is-max-desktop">
+    <h2 class="os-h2"><span class="num">05</span>From a phone video</h2>
+    <p class="os-lead">A one-minute handheld clip of a lab desk becomes a queryable scene. Nothing is tuned to this video;
+      the same pipeline runs on any upload.</p>
+    <div class="os-steps reveal">
+      <div class="os-step"><b>Point maps.</b> A feed-forward reconstructor gives depth and cameras; a metric depth model fixes the scale.</div>
+      <div class="os-step"><b>Gravity.</b> RANSAC finds the floor or desk plane and aligns the scene upright.</div>
+      <div class="os-step"><b>Collapse guard.</b> If the dense 3D features collapse to one label off-distribution, they are switched off.</div>
+      <div class="os-step"><b>Photo naming.</b> Masks are projected back into the source frames; the VLM names a real photo, not a render.</div>
+    </div>
+    <div class="os-media light reveal" style="margin-bottom:1rem"><img src="./static/images/desk_frames.jpg" alt="input frames"></div>
+    <div class="os-two reveal">
+      <div class="os-media"><video controls muted loop playsinline poster="./static/images/poster_lab_desk.jpg"><source src="./static/videos/lab_desk.mp4" type="video/mp4"></video></div>
+      <div class="os-media light" style="display:flex;align-items:center"><img src="./static/images/desk_viewer.jpg" alt="static segmentation results"></div>
+    </div>
+    <div class="os-media light reveal" style="margin-top:1rem"><img src="./static/images/desk_click_naming.jpg" alt="click naming on the lab desk"></div>
+    <p class="os-cap">Top: frames sampled from the clip. Left: the input video. Right: segment-everything, open-vocabulary
+      labels and text queries on the reconstructed cloud, misses included.</p>
+    <p class="os-cap">Below, each pair: the 3D mask from one click (left) and the frame the vision–language model sees (right), with
+      its runner-up names. Failures are kept: a PC case named <em>screwdriver</em>, a rack named <em>printer</em>.</p>
+  </div>
+</section>
+
+<section class="section" id="gallery">
+  <div class="container is-max-desktop">
+    <h2 class="os-h2"><span class="num">06</span>Gallery</h2>
+    <p class="os-lead">Unfiltered viewer output on scenes from four datasets: ten text queries (★ = word not in the training
+      vocabulary), four random clicks with the VLM's name, open-vocabulary labels, and segment-everything.</p>
+  </div>
+  <div class="container" style="max-width:1200px">
+    <div class="carousel os-carousel reveal">
+      <div class="item"><img src="./static/images/gallery/replica_room0.jpg" alt=""><p>Replica · room0</p></div>
+      <div class="item"><img src="./static/images/gallery/scannet_scene0568_00.jpg" alt=""><p>ScanNet · scene0568</p></div>
+      <div class="item"><img src="./static/images/gallery/s3dis_conferenceRoom_2.jpg" alt=""><p>S3DIS · conference room</p></div>
+      <div class="item"><img src="./static/images/gallery/mp3d_pa4otMbVnkk_06.jpg" alt=""><p>Matterport3D</p></div>
+      <div class="item"><img src="./static/images/gallery/replica_office3.jpg" alt=""><p>Replica · office3</p></div>
+      <div class="item"><img src="./static/images/gallery/scannet_scene0050_00.jpg" alt=""><p>ScanNet · scene0050</p></div>
+      <div class="item"><img src="./static/images/gallery/s3dis_office_19.jpg" alt=""><p>S3DIS · office 19</p></div>
+      <div class="item"><img src="./static/images/gallery/replica_room2.jpg" alt=""><p>Replica · room2</p></div>
+    </div>
+  </div>
+  <div class="container is-max-desktop" style="margin-top:2.5rem">
+    <div class="os-two reveal">
+      <div>
+        <h3 class="title is-5">Building-scale search</h3>
+        <div class="os-media light"><img src="./static/images/building.jpg" alt="building-scale query hits"></div>
+        <p class="os-cap">Top hits across a 68-room S3DIS building catalog, with per-query latency.</p>
+      </div>
+      <div>
+        <h3 class="title is-5">Outdoor LiDAR, free vocabulary</h3>
+        <div class="os-media light"><img src="./static/images/outdoor.jpg" alt="outdoor LiDAR labels"></div>
+        <p class="os-cap">XYZ-only nuScenes sweeps labelled with words outside the dataset's classes (★).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="results" style="background:var(--soft)">
+  <div class="container is-max-desktop">
+    <h2 class="os-h2"><span class="num">07</span>Results</h2>
+    <p class="os-lead">Selected numbers. Best per row in red. “Base text head” is the frozen segmenter's own language head.</p>
+
+    <div class="os-table-wrap reveal">
+      <table class="os-table">
+        <thead><tr><th>Task / benchmark</th><th>Metric</th><th class="n">Base text head</th><th class="n">Prior work</th><th class="n">OpenSNAP</th></tr></thead>
+        <tbody>
+          <tr class="grp"><td colspan="5">Open-vocabulary semantic segmentation</td></tr>
+          <tr><td>ScanNet val</td><td>mIoU</td><td class="n">41.5</td><td class="n">52.0 <small>OpenScene</small></td><td class="n best">58.2</td></tr>
+          <tr><td>Matterport-160 (unseen)</td><td>mIoU</td><td class="n">6.9 (1.9)</td><td class="n">9.5 (5.5)</td><td class="n best">11.6 (5.7)</td></tr>
+          <tr><td>nuScenes LiDAR val</td><td>mIoU</td><td class="n">23.8</td><td class="n">26.9</td><td class="n best">32.0</td></tr>
+          <tr><td>SemanticKITTI seq 08</td><td>mIoU / mAcc</td><td class="n">32.8 / 43.7</td><td class="n">20.8 / 37.1</td><td class="n">31.5 / <b style="color:var(--accent)">45.8</b></td></tr>
+          <tr class="grp"><td colspan="5">Open-vocabulary instance segmentation</td></tr>
+          <tr><td>Replica, 8 scenes</td><td>AP / AP50</td><td class="n">14.8 / 19.7</td><td class="n">13.1 / 18.4 <small>OpenMask3D</small></td><td class="n best">19.9 / 25.9</td></tr>
+          <tr><td>S3DIS Area 5</td><td>AP</td><td class="n">10.5</td><td class="n">–</td><td class="n best">15.4</td></tr>
+          <tr><td>nuScenes, 10 thing classes</td><td>AP / AP50</td><td class="n">7.9 / 12.1</td><td class="n">–</td><td class="n best">13.9 / 18.8</td></tr>
+          <tr><td>SemanticKITTI, 8 thing classes</td><td>AP / AP50</td><td class="n">13.9 / 16.3</td><td class="n">–</td><td class="n best">20.6 / 23.0</td></tr>
+          <tr class="grp"><td colspan="5">Naming and text prompts</td></tr>
+          <tr><td>Click → name, Matterport-160</td><td>accuracy</td><td class="n">30.7</td><td class="n">18.9 <small>VLM alone</small></td><td class="n best">40.1</td></tr>
+          <tr><td>Text → mask, ScanNet200</td><td>mIoU</td><td class="n">–</td><td class="n">11.8 <small>training-free</small></td><td class="n best">18.2</td></tr>
+          <tr><td>Text → mask, S3DIS (zero-shot)</td><td>mIoU</td><td class="n">–</td><td class="n">20.0 <small>training-free</small></td><td class="n best">27.2</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="os-table-wrap reveal" style="margin-top:1.4rem">
+      <table class="os-table">
+        <thead><tr><th>System</th><th>Setting</th><th class="n">Without the relation</th><th class="n">OpenSNAP</th></tr></thead>
+        <tbody>
+          <tr><td>Query latency</td><td>S3DIS room, stored relation</td><td class="n">8.8 s</td><td class="n best">0.8 ms</td></tr>
+          <tr><td>Building search</td><td>68 rooms, 5,149 objects</td><td class="n">–</td><td class="n best">0.9–3.4 ms</td></tr>
+          <tr><td>Storage</td><td>68-room catalog vs raw XYZ</td><td class="n">945 MB</td><td class="n best">171 MB</td></tr>
+          <tr><td>Semantic cracking</td><td>repeat queries (AP50)</td><td class="n">26.8 ms (38.9)</td><td class="n best">3.7 ms (38.7)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="os-cap">All tables, protocols and negative results are in the repository's
+      <a href="https://github.com/suhanpahari/OpenSNAP/blob/main/results/TABLES.md">results/TABLES.md</a>.</p>
+  </div>
+</section>
+
+<section class="section" id="bibtex">
+  <div class="container is-max-desktop">
+    <h2 class="os-h2"><span class="num">08</span>BibTeX</h2>
+    <div class="os-bib">
+      <button class="os-copy" id="copy-btn" onclick="copyBib()">copy</button>
+<pre><code id="bibtex-text">@article{opensnap2026,
+  title   = {OpenSNAP: An Open-Vocabulary Object Database for 3D Scans},
+  author  = {Pahari, Soham and Srinivas, M.},
+  journal = {arXiv preprint},
+  year    = {2026}
+}</code></pre>
+    </div>
+  </div>
+</section>
+
+<footer class="os-footer">
+  <div class="container is-max-desktop has-text-centered">
+    <p>Website template adapted from <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>, licensed under
+      <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+  </div>
+</footer>
+
+</body>
+</html>
