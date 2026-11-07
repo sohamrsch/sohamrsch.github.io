@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="OpenSNAP turns a 3D scan into an open-vocabulary object database: click any object for its mask and name, ask for anything in words, and run declarative queries in milliseconds.">
-  <meta name="keywords" content="OpenSNAP, open-vocabulary, 3D point cloud, query language, interactive segmentation, object database">
-  <title>OpenSNAP: An Open-Vocabulary Object Database for 3D Scans</title>
+  <meta name="description" content="RelScan turns a 3D scan into an open-vocabulary object database: click any object for its mask and name, ask for anything in words, and run declarative queries in milliseconds.">
+  <meta name="keywords" content="RelScan, open-vocabulary, 3D point cloud, query language, interactive segmentation, object database">
+  <title>RelScan: An Open-Vocabulary Object Database for 3D Scans</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
@@ -13,21 +13,21 @@
   <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
   <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-  <link rel="stylesheet" href="./static/css/opensnap.css">
+  <link rel="stylesheet" href="./static/css/relscan.css">
   <link rel="icon" href="./static/images/favicon.svg">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script defer src="./static/js/fontawesome.all.min.js"></script>
   <script src="./static/js/bulma-carousel.min.js"></script>
   <script src="./static/js/bulma-slider.min.js"></script>
-  <script src="./static/js/opensnap.js"></script>
+  <script src="./static/js/relscan.js"></script>
 </head>
 <body>
 
 <section class="os-hero">
   <div class="container is-max-desktop has-text-centered">
     <div class="os-kicker">Open-vocabulary 3D · Query processing · Interactive segmentation</div>
-    <h1 class="os-title">Open<span>SNAP</span></h1>
+    <h1 class="os-title">Rel<span>Scan</span></h1>
     <p class="os-subtitle">An open-vocabulary object database for 3D scans. Click anything to get its mask and its name,
       ask for anything in words, and query a whole building in milliseconds.</p>
 
@@ -98,7 +98,7 @@
     <div class="os-abstract content reveal">
       <p>3D scans of rooms, buildings and streets are collected at scale, but they stay raw point sets: every semantic
         question (<em>where are the chairs? which monitor is next to the bottle?</em>) means re-running a segmentation
-        network over the whole scan with a fixed list of class names. We present <b>OpenSNAP</b>, which turns a scan into an
+        network over the whole scan with a fixed list of class names. We present <b>RelScan</b>, which turns a scan into an
         <b>open-vocabulary object database</b>. A scan is ingested once into an <b>object relation</b>: one tuple per object with
         its geometry, a learned segmenter token and mask-pooled 3D vision–language evidence. Open-vocabulary predicates such as
         <code>IS('whiteboard')</code> get <b>calibrated probabilistic semantics</b>, and an <b>open-vocabulary query language
@@ -217,7 +217,7 @@
       positive-only clicks still follow the frozen path exactly.</p>
     <div class="reveal">
       <div class="os-toggle" id="bar-toggle"><button data-k="5" class="is-active">IoU @ 5 clicks</button><button data-k="10">IoU @ 10 clicks</button></div>
-      <div class="os-legend"><span><i style="background:#cbd5e1"></i>frozen decoder, same clicks</span><span><i style="background:linear-gradient(90deg,#0d9488,#2563eb)"></i>OpenSNAP</span></div>
+      <div class="os-legend"><span><i style="background:#cbd5e1"></i>frozen decoder, same clicks</span><span><i style="background:linear-gradient(90deg,#0d9488,#2563eb)"></i>RelScan</span></div>
       <div class="os-bars" id="bars"></div>
       <p class="os-cap">Same simulated positive + negative click sequence for both methods. Click latency: 16–43 ms on a
         267k-voxel room.</p>
@@ -290,7 +290,7 @@
 
     <div class="os-table-wrap reveal">
       <table class="os-table">
-        <thead><tr><th>Task / benchmark</th><th>Metric</th><th class="n">Base text head</th><th class="n">Prior work</th><th class="n">OpenSNAP</th></tr></thead>
+        <thead><tr><th>Task / benchmark</th><th>Metric</th><th class="n">Base text head</th><th class="n">Prior work</th><th class="n">RelScan</th></tr></thead>
         <tbody>
           <tr class="grp"><td colspan="5">Open-vocabulary semantic segmentation</td></tr>
           <tr><td>ScanNet val</td><td>mIoU</td><td class="n">41.5</td><td class="n">52.0 <small>OpenScene</small></td><td class="n best">58.2</td></tr>
@@ -312,7 +312,7 @@
 
     <div class="os-table-wrap reveal" style="margin-top:1.4rem">
       <table class="os-table">
-        <thead><tr><th>System</th><th>Setting</th><th class="n">Without the relation</th><th class="n">OpenSNAP</th></tr></thead>
+        <thead><tr><th>System</th><th>Setting</th><th class="n">Without the relation</th><th class="n">RelScan</th></tr></thead>
         <tbody>
           <tr><td>Query latency</td><td>S3DIS room, stored relation</td><td class="n">8.8 s</td><td class="n best">0.8 ms</td></tr>
           <tr><td>Building search</td><td>68 rooms, 5,149 objects</td><td class="n">–</td><td class="n best">0.9–3.4 ms</td></tr>
@@ -331,8 +331,8 @@
     <h2 class="os-h2"><span class="num">08</span>BibTeX</h2>
     <div class="os-bib">
       <button class="os-copy" id="copy-btn" onclick="copyBib()">copy</button>
-<pre><code id="bibtex-text">@article{opensnap2026,
-  title   = {OpenSNAP: An Open-Vocabulary Object Database for 3D Scans},
+<pre><code id="bibtex-text">@article{relscan2026,
+  title   = {RelScan: An Open-Vocabulary Object Database for 3D Scans},
   author  = {Pahari, Soham and Srinivas, M.},
   journal = {arXiv preprint},
   year    = {2026}
